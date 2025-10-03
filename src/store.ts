@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import counterReducer from './counterSlice';
+import themeReducer from './themeSlice';
 import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // localStorage for web
-import { combineReducers } from 'redux';
+import storage from 'redux-persist/lib/storage';
+import { combineReducers } from '@reduxjs/toolkit';
 
 const persistConfig = {
   key: 'root',
@@ -11,17 +12,16 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   counter: counterReducer,
+  theme: themeReducer,   
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: persistedReducer, // for this setup with redux-persist v6
-  // (RTK 1.x accepts middleware array or callback; this works)
+  reducer: persistedReducer,
 });
 
 export const persistor = persistStore(store);
 
-// inferred types:
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
